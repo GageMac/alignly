@@ -35,8 +35,24 @@ namespace Alignly.Api.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error generating optimized resume");
-                throw new ApplicationException("Failed to generate optimized resume", ex);
+                _logger.LogError(ex, "Error generating optimized resume. Exception type: {ExceptionType}, Message: {Message}", 
+                    ex.GetType().Name, ex.Message);
+                
+                // More specific error messages
+                if (ex.Message.Contains("401") || ex.Message.Contains("Unauthorized"))
+                {
+                    throw new ApplicationException("Invalid OpenAI API key. Please check your configuration.", ex);
+                }
+                else if (ex.Message.Contains("429") || ex.Message.Contains("quota"))
+                {
+                    throw new ApplicationException("OpenAI API quota exceeded. Please check your usage limits.", ex);
+                }
+                else if (ex.Message.Contains("network") || ex.Message.Contains("timeout"))
+                {
+                    throw new ApplicationException("Network error connecting to OpenAI API. Please try again.", ex);
+                }
+                
+                throw new ApplicationException($"Failed to generate optimized resume: {ex.Message}", ex);
             }
         }
 
