@@ -59,23 +59,54 @@ namespace Alignly.Api.Services
         private static string BuildPrompt(string resume, string jobDescription)
         {
             return $@"
-You are an expert resume writer and career coach. Please rewrite the following resume to better align with the job description provided. 
+You are a professional resume optimization specialist with 15+ years of experience in recruitment and ATS systems. Your task is to enhance a resume for maximum impact while maintaining authenticity.
 
-Job Description:
+**JOB DESCRIPTION:**
 {jobDescription}
 
-Current Resume:
+**CURRENT RESUME:**
 {resume}
 
-Instructions:
-1. Rewrite the resume content to better match the job requirements
-2. Include relevant keywords from the job description
-3. Enhance the professional summary and experience descriptions
-4. Maintain the original structure but improve the content
-5. Focus on quantifiable achievements where possible
-6. Ensure the tone is professional and ATS-friendly
+**OPTIMIZATION INSTRUCTIONS:**
 
-Please provide only the rewritten resume content without any additional commentary.";
+**STRUCTURE & FORMATTING:**
+- Preserve the original resume's overall structure, sections, and personal tone
+- Maintain professional formatting with consistent spacing and alignment
+- Keep the same writing style but enhance clarity and impact
+- Do not add fictional experience or inflate responsibilities
+
+**KEYWORD OPTIMIZATION:**
+- Analyze the job description and naturally incorporate relevant keywords into existing experience
+- Match technical skills, tools, and methodologies mentioned in the job posting
+- Use exact keyword phrases when they authentically fit the candidate's background
+- Replace generic terms with industry-specific language from the job description
+
+**CONTENT ENHANCEMENT:**
+- Transform existing bullet points to show stronger alignment with job requirements
+- Add quantifiable metrics where the original experience suggests measurable impact
+- Use action verbs that match the job description's language style
+- Highlight transferable skills that directly address job responsibilities
+
+**ATS OPTIMIZATION:**
+- Use standard section headers (Experience, Skills, Education, etc.)
+- Avoid overusing buzzwords like 'leveraged', 'spearheaded', 'orchestrated', 'delved', 'realm'
+- Write in clear, professional language that sounds human, not AI-generated
+- Ensure keyword density feels natural, not forced
+
+**ACHIEVEMENT FOCUS:**
+- Enhance existing accomplishments with stronger, more specific language
+- Connect past achievements to the target role's requirements
+- Show progression and growth in responsibilities
+- Emphasize results and impact using metrics when supported by context
+
+**QUALITY STANDARDS:**
+- Every statement must be truthful and defensible in an interview
+- Maintain consistency in verb tenses and formatting
+- Ensure the candidate could confidently discuss every enhanced point
+- Keep the authentic voice and personality of the original resume
+
+**OUTPUT FORMAT:**
+Provide only the enhanced resume content. No explanatory text, commentary, or suggestions.";
         }
 
         private static List<string> ExtractSections(string rewrittenResume)

@@ -47,9 +47,36 @@
               class="mb-4"
             />
 
-            <div class="relative">
+            <!-- Collapsible Resume Text Area -->
+            <div v-if="resumeText && !showResumeEditor" class="mb-4">
+              <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center space-x-2">
+                    <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                      <path
+                        fill-rule="evenodd"
+                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                    <span class="text-sm font-medium text-green-800"
+                      >Resume loaded successfully</span
+                    >
+                    <span class="text-xs text-green-600">({{ resumeText.length }} characters)</span>
+                  </div>
+                  <button
+                    @click="showResumeEditor = true"
+                    class="text-xs text-green-700 hover:text-green-900 font-medium underline"
+                  >
+                    Edit resume text
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div v-if="!resumeText || showResumeEditor" class="relative">
               <label class="block text-sm font-medium text-gray-700 mb-2">
-                Or paste your resume text
+                {{ resumeText ? 'Edit your resume text' : 'Or paste your resume text' }}
               </label>
               <textarea
                 v-model="resumeText"
@@ -60,6 +87,16 @@
               ></textarea>
               <div class="absolute bottom-3 right-3 text-xs text-gray-400">
                 {{ resumeText.length }} characters
+              </div>
+
+              <!-- Hide Editor Button -->
+              <div v-if="showResumeEditor && resumeText.length > 100" class="mt-2 text-right">
+                <button
+                  @click="showResumeEditor = false"
+                  class="text-xs text-gray-600 hover:text-gray-800 font-medium"
+                >
+                  ✓ Done editing
+                </button>
               </div>
             </div>
           </div>
@@ -117,6 +154,7 @@
       <!-- Results Section -->
       <div
         v-if="optimizedResume"
+        ref="resultsSection"
         class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden"
       >
         <div class="p-6 border-b border-gray-100">
@@ -237,9 +275,13 @@ const canOptimize = computed(() => {
   )
 })
 
+const showResumeEditor = ref(false)
+const resultsSection = ref<HTMLElement>()
+
 const handleFileProcessed = (data: { text: string; filename: string }) => {
   resumeText.value = data.text
   originalFilename.value = data.filename
+  showResumeEditor.value = false // Auto-hide editor when file is processed
   error.value = ''
 }
 
@@ -280,6 +322,16 @@ const optimizeResume = async () => {
 
     optimizedResume.value = response.rewrittenResume
     loadingStep.value = 4
+
+    // Auto-scroll to results after a brief delay
+    setTimeout(() => {
+      if (resultsSection.value) {
+        resultsSection.value.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        })
+      }
+    }, 500)
   } catch (err: any) {
     console.error('Optimization failed:', err)
     error.value = getErrorMessage(err)

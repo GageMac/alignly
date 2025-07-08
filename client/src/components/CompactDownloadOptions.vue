@@ -1,5 +1,46 @@
 <template>
-  <div class="space-y-4">
+  <div class="space-y-6">
+    <!-- Template Selection -->
+    <div>
+      <label class="text-sm font-medium text-gray-900 mb-3 block">Choose Template Style</label>
+      <div class="grid grid-cols-1 gap-3">
+        <label
+          v-for="template in templates"
+          :key="template.id"
+          class="flex items-center cursor-pointer"
+        >
+          <input type="radio" v-model="selectedTemplate" :value="template.id" class="sr-only" />
+          <div
+            class="flex items-center w-full px-4 py-3 rounded-lg border-2 transition-all duration-200"
+            :class="
+              selectedTemplate === template.id
+                ? 'border-blue-500 bg-blue-50'
+                : 'border-gray-200 hover:border-gray-300'
+            "
+          >
+            <div
+              class="w-5 h-5 rounded-full border-2 transition-all duration-200 flex items-center justify-center mr-3"
+              :class="
+                selectedTemplate === template.id ? 'border-blue-500 bg-blue-500' : 'border-gray-300'
+              "
+            >
+              <div
+                v-if="selectedTemplate === template.id"
+                class="w-2 h-2 bg-white rounded-full"
+              ></div>
+            </div>
+            <div class="flex-1">
+              <div class="flex items-center space-x-2">
+                <component :is="template.icon" class="w-5 h-5" :class="template.iconColor" />
+                <span class="text-sm font-medium text-gray-900">{{ template.name }}</span>
+              </div>
+              <p class="text-xs text-gray-500 mt-1">{{ template.description }}</p>
+            </div>
+          </div>
+        </label>
+      </div>
+    </div>
+
     <!-- Format Selection -->
     <div>
       <label class="text-sm font-medium text-gray-900 mb-3 block">Download Format</label>
@@ -118,6 +159,31 @@
 import { ref, watch } from 'vue'
 import { resumeDownloadService } from '../services/resumeDownloadService'
 
+// Template Icons (using simple SVG components)
+const ModernIcon = {
+  template: `
+    <svg fill="currentColor" viewBox="0 0 20 20">
+      <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zm0 4a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd" />
+    </svg>
+  `,
+}
+
+const TraditionalIcon = {
+  template: `
+    <svg fill="currentColor" viewBox="0 0 20 20">
+      <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2H4zm0 2h12v8H4V6z" clip-rule="evenodd" />
+    </svg>
+  `,
+}
+
+const TechIcon = {
+  template: `
+    <svg fill="currentColor" viewBox="0 0 20 20">
+      <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z" />
+    </svg>
+  `,
+}
+
 interface Props {
   optimizedResume: string
   originalFilename?: string
@@ -129,8 +195,33 @@ const emit = defineEmits<{
 }>()
 
 const selectedFormat = ref<'pdf' | 'docx'>('pdf')
+const selectedTemplate = ref('modern')
 const filename = ref('')
 const isDownloading = ref(false)
+
+const templates = [
+  {
+    id: 'modern',
+    name: 'Modern',
+    description: 'Clean design with subtle colors and modern typography',
+    icon: ModernIcon,
+    iconColor: 'text-blue-600',
+  },
+  {
+    id: 'traditional',
+    name: 'Traditional',
+    description: 'Classic format preferred by conservative industries',
+    icon: TraditionalIcon,
+    iconColor: 'text-gray-600',
+  },
+  {
+    id: 'techy',
+    name: 'Tech-Focused',
+    description: 'Contemporary style optimized for tech companies',
+    icon: TechIcon,
+    iconColor: 'text-purple-600',
+  },
+]
 
 // Auto-generate filename from original or use default
 watch(
@@ -154,9 +245,17 @@ const handleDownload = async () => {
 
   try {
     if (selectedFormat.value === 'pdf') {
-      await resumeDownloadService.generatePDF(props.optimizedResume, filename.value)
+      await resumeDownloadService.generatePDF(
+        props.optimizedResume,
+        filename.value,
+        selectedTemplate.value,
+      )
     } else {
-      await resumeDownloadService.generateDOCX(props.optimizedResume, filename.value)
+      await resumeDownloadService.generateDOCX(
+        props.optimizedResume,
+        filename.value,
+        selectedTemplate.value,
+      )
     }
   } catch (error) {
     console.error('Download failed:', error)
