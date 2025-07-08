@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import ResumeOptimizer from './components/ResumeOptimizer.vue'
+// Clean App.vue ready for routing and global components
 </script>
 
 <template>
   <div class="min-h-screen bg-gray-50">
-    <ResumeOptimizer />
+    <RouterView />
   </div>
 </template>
