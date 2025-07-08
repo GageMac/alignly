@@ -1,100 +1,198 @@
 <template>
-  <div class="max-w-4xl mx-auto p-6">
-    <div class="text-center mb-8">
-      <h1 class="text-3xl font-bold text-gray-900 mb-2">Alignly</h1>
-      <p class="text-gray-600">AI-powered resume optimization for job applications</p>
-    </div>
+  <!-- Modern Header -->
+  <ModernHeader />
 
-    <!-- Input Form -->
-    <div class="bg-white rounded-lg shadow-md p-6 mb-8">
-      <form @submit.prevent="handleSubmit" class="space-y-6">
-        <div>
-          <label for="resume" class="block text-sm font-medium text-gray-700 mb-2">
-            Your Resume
-          </label>
-          <textarea
-            id="resume"
-            v-model="formData.resume"
-            rows="12"
-            placeholder="Paste your resume content here..."
-            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            required
-          />
+  <!-- Main Content -->
+  <div class="min-h-screen bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <!-- Hero Section -->
+      <div class="text-center mb-12">
+        <h2 class="text-4xl font-bold text-gray-900 mb-4">Optimize Your Resume with AI</h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+          Upload your resume, paste a job description, and get an AI-optimized resume tailored to
+          land your dream job.
+        </p>
+      </div>
+
+      <!-- Step Indicator -->
+      <StepIndicator :current-step="currentStep" />
+
+      <!-- Error Message -->
+      <ErrorMessage
+        v-if="error"
+        :message="error"
+        :can-retry="true"
+        @retry="handleRetry"
+        class="mb-8"
+      />
+
+      <!-- Main Content Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+        <!-- Step 1: Resume Input -->
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+          <div class="p-6 border-b border-gray-100">
+            <div class="flex items-center space-x-3">
+              <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                <span class="text-blue-600 font-semibold text-sm">1</span>
+              </div>
+              <h3 class="text-lg font-semibold text-gray-900">Your Resume</h3>
+            </div>
+            <p class="text-sm text-gray-500 mt-2">Upload a file or paste your resume text</p>
+          </div>
+
+          <div class="p-6">
+            <FileUpload
+              @file-processed="handleFileProcessed"
+              @error="handleFileError"
+              class="mb-4"
+            />
+
+            <div class="relative">
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Or paste your resume text
+              </label>
+              <textarea
+                v-model="resumeText"
+                placeholder="Paste your resume content here..."
+                rows="12"
+                class="w-full px-3 py-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                :class="{ 'border-green-300 bg-green-50': resumeText.length > 100 }"
+              ></textarea>
+              <div class="absolute bottom-3 right-3 text-xs text-gray-400">
+                {{ resumeText.length }} characters
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div>
-          <label for="jobDescription" class="block text-sm font-medium text-gray-700 mb-2">
-            Job Description
-          </label>
-          <textarea
-            id="jobDescription"
-            v-model="formData.jobDescription"
-            rows="8"
-            placeholder="Paste the job description here..."
-            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            required
-          />
-        </div>
+        <!-- Step 2: Job Description -->
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+          <div class="p-6 border-b border-gray-100">
+            <div class="flex items-center space-x-3">
+              <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                <span class="text-blue-600 font-semibold text-sm">2</span>
+              </div>
+              <h3 class="text-lg font-semibold text-gray-900">Target Job</h3>
+            </div>
+            <p class="text-sm text-gray-500 mt-2">Paste the job description you're applying for</p>
+          </div>
 
+          <div class="p-6">
+            <div class="relative">
+              <textarea
+                v-model="jobDescription"
+                placeholder="Paste the job description here..."
+                rows="16"
+                class="w-full px-3 py-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                :class="{ 'border-green-300 bg-green-50': jobDescription.length > 100 }"
+              ></textarea>
+              <div class="absolute bottom-3 right-3 text-xs text-gray-400">
+                {{ jobDescription.length }} characters
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Optimize Button -->
+      <div class="text-center mb-8">
         <button
-          type="submit"
-          :disabled="loading || !formData.resume.trim() || !formData.jobDescription.trim()"
-          class="w-full bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          @click="optimizeResume"
+          :disabled="!canOptimize || isLoading"
+          class="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-semibold py-4 px-8 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md text-lg"
         >
-          {{ loading ? 'Optimizing Resume...' : 'Generate Optimized Resume' }}
+          {{ isLoading ? 'Optimizing...' : 'Optimize My Resume' }}
         </button>
-      </form>
-    </div>
+        <p class="text-sm text-gray-500 mt-2">This usually takes 10-30 seconds</p>
+      </div>
 
-    <!-- Loading State -->
-    <div v-if="loading" class="text-center py-8">
-      <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-      <p class="mt-2 text-gray-600">Analyzing your resume and job description...</p>
-    </div>
+      <!-- Loading Progress -->
+      <LoadingProgress
+        v-if="isLoading"
+        :current-step="loadingStep"
+        :time-elapsed="timeElapsed"
+        class="mb-8"
+      />
 
-    <!-- Error State -->
-    <div v-if="error" class="bg-red-50 border border-red-200 rounded-md p-4 mb-8">
-      <div class="flex">
-        <div class="ml-3">
-          <h3 class="text-sm font-medium text-red-800">Error</h3>
-          <div class="mt-2 text-sm text-red-700">
-            {{ error }}
+      <!-- Results Section -->
+      <div
+        v-if="optimizedResume"
+        class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden"
+      >
+        <div class="p-6 border-b border-gray-100">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+              <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+                <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    fill-rule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              </div>
+              <h3 class="text-lg font-semibold text-gray-900">Optimized Resume</h3>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="hidden sm:flex items-center space-x-6 text-sm text-gray-500">
+              <div class="text-center">
+                <div class="font-semibold text-gray-900">
+                  {{ Math.round((optimizedResume.length / resumeText.length - 1) * 100) }}%
+                </div>
+                <div>Improvement</div>
+              </div>
+              <div class="text-center">
+                <div class="font-semibold text-gray-900">
+                  {{ optimizedResume.split('\n').length }}
+                </div>
+                <div>Lines</div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
 
-    <!-- Results -->
-    <div v-if="results && !loading" class="space-y-8">
-      <!-- Optimized Resume -->
-      <div class="bg-white rounded-lg shadow-md p-6">
-        <h2 class="text-xl font-semibold text-gray-900 mb-4">Optimized Resume</h2>
-        <div class="bg-gray-50 rounded-md p-4">
-          <pre class="whitespace-pre-wrap text-sm text-gray-700 font-mono">{{
-            results.rewrittenResume
-          }}</pre>
-        </div>
-      </div>
-
-      <!-- Extracted Sections -->
-      <div v-if="results.sections.length > 0" class="bg-white rounded-lg shadow-md p-6">
-        <h2 class="text-xl font-semibold text-gray-900 mb-4">Extracted Resume Sections</h2>
-        <div class="space-y-3">
-          <div
-            v-for="(section, index) in results.sections"
-            :key="index"
-            class="bg-blue-50 rounded-md p-3"
-          >
-            <p class="text-sm text-gray-700">{{ section }}</p>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 p-6">
+          <!-- Optimized Resume Text -->
+          <div class="lg:col-span-2">
+            <label class="block text-sm font-medium text-gray-700 mb-3">
+              Your optimized resume
+            </label>
+            <div class="relative">
+              <textarea
+                :value="optimizedResume"
+                readonly
+                rows="20"
+                class="w-full px-3 py-3 border border-gray-200 rounded-lg text-sm bg-gray-50 focus:outline-none resize-none"
+              ></textarea>
+              <button
+                @click="copyToClipboard"
+                class="absolute top-3 right-3 p-2 text-gray-400 hover:text-gray-600 transition-colors"
+                title="Copy to clipboard"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                  />
+                </svg>
+              </button>
+            </div>
           </div>
-        </div>
-      </div>
 
-      <!-- Suggestions -->
-      <div v-if="results.suggestions" class="bg-white rounded-lg shadow-md p-6">
-        <h2 class="text-xl font-semibold text-gray-900 mb-4">Improvement Suggestions</h2>
-        <div class="bg-yellow-50 rounded-md p-4">
-          <pre class="whitespace-pre-wrap text-sm text-gray-700">{{ results.suggestions }}</pre>
+          <!-- Download Options -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-3">
+              Download your resume
+            </label>
+            <CompactDownloadOptions
+              :optimized-resume="optimizedResume"
+              :original-filename="originalFilename"
+              @error="handleDownloadError"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -102,35 +200,128 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
-import { resumeService } from '@/services/resumeService'
-import type { GenerateResumeResponse } from '@/types/api'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { resumeService } from '../services/resumeService'
+import FileUpload from './FileUpload.vue'
+import LoadingProgress from './LoadingProgress.vue'
+import ErrorMessage from './ErrorMessage.vue'
+import CompactDownloadOptions from './CompactDownloadOptions.vue'
+import ModernHeader from './ModernHeader.vue'
+import StepIndicator from './StepIndicator.vue'
 
-const loading = ref(false)
-const error = ref<string | null>(null)
-const results = ref<GenerateResumeResponse | null>(null)
+const resumeText = ref('')
+const jobDescription = ref('')
+const optimizedResume = ref('')
+const originalFilename = ref('')
+const isLoading = ref(false)
+const error = ref('')
+const loadingStep = ref(0)
+const timeElapsed = ref(0)
+const retryCount = ref(0)
 
-const formData = reactive({
-  resume: '',
-  jobDescription: '',
+let loadingInterval: number | null = null
+let timeInterval: number | null = null
+
+const currentStep = computed(() => {
+  if (optimizedResume.value) return 3
+  if (jobDescription.value.length > 50) return 2
+  if (resumeText.value.length > 50) return 1
+  return 0
 })
 
-const handleSubmit = async () => {
-  loading.value = true
-  error.value = null
-  results.value = null
+const canOptimize = computed(() => {
+  return (
+    resumeText.value.trim().length > 50 &&
+    jobDescription.value.trim().length > 50 &&
+    !isLoading.value
+  )
+})
+
+const handleFileProcessed = (data: { text: string; filename: string }) => {
+  resumeText.value = data.text
+  originalFilename.value = data.filename
+  error.value = ''
+}
+
+const handleFileError = (errorMessage: string) => {
+  error.value = errorMessage
+}
+
+const handleDownloadError = (errorMessage: string) => {
+  error.value = errorMessage
+}
+
+const optimizeResume = async () => {
+  if (!canOptimize.value) return
+
+  isLoading.value = true
+  error.value = ''
+  loadingStep.value = 0
+  timeElapsed.value = 0
+  retryCount.value = 0
+
+  // Start progress simulation
+  loadingInterval = setInterval(() => {
+    if (loadingStep.value < 3) {
+      loadingStep.value++
+    }
+  }, 3000) as unknown as number
+
+  // Start time tracking
+  timeInterval = setInterval(() => {
+    timeElapsed.value++
+  }, 1000) as unknown as number
 
   try {
     const response = await resumeService.generateOptimizedResume({
-      resume: formData.resume,
-      jobDescription: formData.jobDescription,
+      resume: resumeText.value,
+      jobDescription: jobDescription.value,
     })
 
-    results.value = response
-  } catch (err) {
-    error.value = err instanceof Error ? err.message : 'An unexpected error occurred'
+    optimizedResume.value = response.rewrittenResume
+    loadingStep.value = 4
+  } catch (err: any) {
+    console.error('Optimization failed:', err)
+    error.value = getErrorMessage(err)
   } finally {
-    loading.value = false
+    isLoading.value = false
+    if (loadingInterval) clearInterval(loadingInterval)
+    if (timeInterval) clearInterval(timeInterval)
   }
 }
+
+const handleRetry = () => {
+  retryCount.value++
+  optimizeResume()
+}
+
+const getErrorMessage = (err: any): string => {
+  if (err.name === 'TimeoutError' || err.message?.includes('timeout')) {
+    return 'The request took too long. Please try again with a shorter resume or job description.'
+  }
+
+  if (err.message?.includes('fetch')) {
+    return 'Network connection error. Please check your internet connection and try again.'
+  }
+
+  if (err.message?.includes('500')) {
+    return 'Server error. Our AI service might be temporarily unavailable. Please try again in a few minutes.'
+  }
+
+  return err.message || 'Something went wrong while optimizing your resume. Please try again.'
+}
+
+const copyToClipboard = async () => {
+  try {
+    await navigator.clipboard.writeText(optimizedResume.value)
+    //Could add a toast notification here
+  } catch (err) {
+    console.error('Failed to copy to clipboard:', err)
+  }
+}
+
+onUnmounted(() => {
+  if (loadingInterval) clearInterval(loadingInterval)
+  if (timeInterval) clearInterval(timeInterval)
+})
 </script>
