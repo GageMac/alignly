@@ -38,7 +38,7 @@ export interface ResumeTemplate {
     section: number
     line: number
   }
-  style: 'modern' | 'traditional' | 'techy'
+  style: 'modern' | 'corporate' | 'creative'
 }
 
 export class ResumeDownloadService {
@@ -61,8 +61,8 @@ export class ResumeDownloadService {
       },
       style: 'modern',
     },
-    traditional: {
-      name: 'Traditional',
+    corporate: {
+      name: 'Corporate',
       colors: {
         primary: '#374151', // Gray-700
         secondary: '#6b7280', // Gray-500
@@ -77,10 +77,10 @@ export class ResumeDownloadService {
         section: 16,
         line: 5,
       },
-      style: 'traditional',
+      style: 'corporate',
     },
-    techy: {
-      name: 'Tech-Focused',
+    creative: {
+      name: 'Creative',
       colors: {
         primary: '#7c3aed', // Purple-600
         secondary: '#64748b', // Slate-500
@@ -95,7 +95,7 @@ export class ResumeDownloadService {
         section: 20,
         line: 6,
       },
-      style: 'techy',
+      style: 'creative',
     },
   }
 
@@ -241,7 +241,7 @@ export class ResumeDownloadService {
     const { pageWidth, margin, contentWidth } = layout
 
     // Header - Name with template styling
-    doc.setFontSize(template.style === 'traditional' ? 22 : 24)
+    doc.setFontSize(template.style === 'corporate' ? 22 : 24)
     doc.setFont(template.fonts.heading, 'bold')
 
     if (template.style === 'modern') {
@@ -265,7 +265,7 @@ export class ResumeDownloadService {
     yPosition += template.spacing.section
 
     // Decorative line based on template
-    doc.setLineWidth(template.style === 'techy' ? 1 : 0.5)
+    doc.setLineWidth(template.style === 'creative' ? 1 : 0.5)
     const [accentR, accentG, accentB] = this.hexToRgb(template.colors.accent)
     doc.setDrawColor(accentR, accentG, accentB)
     doc.line(margin, yPosition, pageWidth - margin, yPosition)
@@ -280,14 +280,14 @@ export class ResumeDownloadService {
       }
 
       // Section title with template styling
-      doc.setFontSize(template.style === 'traditional' ? 12 : 14)
+      doc.setFontSize(template.style === 'corporate' ? 12 : 14)
       doc.setFont(template.fonts.heading, 'bold')
       const [sectionPrimaryR, sectionPrimaryG, sectionPrimaryB] = this.hexToRgb(
         template.colors.primary,
       )
       doc.setTextColor(sectionPrimaryR, sectionPrimaryG, sectionPrimaryB)
 
-      if (template.style === 'techy') {
+      if (template.style === 'creative') {
         // Tech: Add background rectangle for section headers
         doc.setFillColor(249, 250, 251) // Very light gray
         doc.rect(margin, yPosition - 4, contentWidth, 12, 'F')
@@ -329,7 +329,7 @@ export class ResumeDownloadService {
           new TextRun({
             text: parsed.name,
             bold: true,
-            size: template.style === 'traditional' ? 28 : 32,
+            size: template.style === 'corporate' ? 28 : 32,
             color: template.colors.primary.replace('#', ''),
             font: template.fonts.heading,
           }),
@@ -367,7 +367,7 @@ export class ResumeDownloadService {
             new TextRun({
               text: section.title.toUpperCase(),
               bold: true,
-              size: template.style === 'traditional' ? 24 : 28,
+              size: template.style === 'corporate' ? 24 : 28,
               color: template.colors.primary.replace('#', ''),
               font: template.fonts.heading,
             }),

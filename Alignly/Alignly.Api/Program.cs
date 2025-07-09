@@ -1,12 +1,20 @@
 using Alignly.Api.Services;
 using OpenAI;
 using OpenAI.Chat;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        // Configure JSON serialization for camelCase to match PDF service
+        options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+        options.JsonSerializerOptions.WriteIndented = true;
+    });
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -23,22 +31,35 @@ builder.Services.AddCors(options =>
         });
 });
 
-// Configure OpenAI
+// Configure HTTP Client for PDF service
+builder.Services.AddHttpClient("PdfService", client =>
+{
+    var pdfServiceUrl = builder.Configuration["PdfService:BaseUrl"] ?? "http://localhost:3001";
+    client.BaseAddress = new Uri(pdfServiceUrl);
+    client.DefaultRequestHeaders.Add("Accept", "application/pdf");
+    client.Timeout = TimeSpan.FromMinutes(2); // PDF generation can take time
+});
+
+// Register default HttpClient for controller injection
+builder.Services.AddScoped<HttpClient>(provider =>
+{
+    var httpClientFactory = provider.GetRequiredService<IHttpClientFactory>();
+    return httpClientFactory.CreateClient("PdfService");
+});
+
+// Configure OpenAI - API key is required for production
 var openAiApiKey = builder.Configuration["OpenAI:ApiKey"] ?? Environment.GetEnvironmentVariable("OPENAI_API_KEY");
 
-if (!string.IsNullOrEmpty(openAiApiKey))
+if (string.IsNullOrEmpty(openAiApiKey))
 {
-    // Register real OpenAI services when API key is available
-    builder.Services.AddSingleton(new OpenAIClient(openAiApiKey));
-    builder.Services.AddTransient<ChatClient>(provider => 
-        provider.GetRequiredService<OpenAIClient>().GetChatClient("gpt-3.5-turbo"));
-    builder.Services.AddScoped<IResumeService, ResumeService>();
+    throw new InvalidOperationException("OpenAI API key is required. Please set the OPENAI_API_KEY environment variable or configure it in appsettings.json.");
 }
-else
-{
-    // Register mock service when no API key is available
-    builder.Services.AddScoped<IResumeService, MockResumeService>();
-}
+
+// Register OpenAI services
+builder.Services.AddSingleton(new OpenAIClient(openAiApiKey));
+builder.Services.AddTransient<ChatClient>(provider => 
+    provider.GetRequiredService<OpenAIClient>().GetChatClient("gpt-3.5-turbo"));
+builder.Services.AddScoped<IResumeService, ResumeService>();
 
 var app = builder.Build();
 

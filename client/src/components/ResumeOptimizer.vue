@@ -315,13 +315,28 @@ const optimizeResume = async () => {
   }, 1000) as unknown as number
 
   try {
-    const response = await resumeService.generateOptimizedResume({
-      resume: resumeText.value,
-      jobDescription: jobDescription.value,
-    })
+    // Generate optimized PDF directly
+    const pdfBlob = await resumeService.generateOptimizedPdf(
+      {
+        resume: resumeText.value,
+        jobDescription: jobDescription.value,
+      },
+      'modern',
+      'blue',
+    ) // Default to modern template with blue color
 
-    optimizedResume.value = response.rewrittenResume
     loadingStep.value = 4
+
+    // Download the PDF
+    const filename = originalFilename.value
+      ? `optimized-${originalFilename.value.replace(/\.[^/.]+$/, '')}.pdf`
+      : 'optimized-resume.pdf'
+
+    resumeService.downloadPdf(pdfBlob, filename)
+
+    // Set a success message instead of showing text
+    optimizedResume.value =
+      '✅ Your optimized resume has been downloaded successfully! The PDF has been tailored to match the job description with enhanced keywords and professional formatting.'
 
     // Auto-scroll to results after a brief delay
     setTimeout(() => {
