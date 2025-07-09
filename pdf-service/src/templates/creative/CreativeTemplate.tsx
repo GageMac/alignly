@@ -53,7 +53,7 @@ const creativeColors = {
   },
 };
 
-// Create creative styles
+// Create creative styles with improved typography hierarchy
 const createCreativeStyles = (colorScheme: string = "coral") => {
   const theme =
     creativeColors[colorScheme as keyof typeof creativeColors] ||
@@ -65,15 +65,15 @@ const createCreativeStyles = (colorScheme: string = "coral") => {
       backgroundColor: theme.white,
       fontFamily: "Helvetica",
       fontSize: 10,
-      lineHeight: 1.4,
+      lineHeight: 1.5, // Improved line height
       color: theme.text,
     },
 
-    // Header with gradient-style accent
+    // Header with enhanced gradient-style accent
     headerContainer: {
       backgroundColor: theme.primary,
       marginBottom: 0,
-      paddingVertical: 40,
+      paddingVertical: 44, // Increased padding
       paddingHorizontal: 50,
     },
     header: {
@@ -85,14 +85,14 @@ const createCreativeStyles = (colorScheme: string = "coral") => {
       flex: 1,
     },
     name: {
-      fontSize: 36,
+      fontSize: 40, // Increased from 36
       fontWeight: "bold",
       color: theme.white,
-      marginBottom: 8,
+      marginBottom: 10, // Increased spacing
       fontFamily: "Times-Roman",
     },
     tagline: {
-      fontSize: 14,
+      fontSize: 15, // Increased from 14
       color: theme.white,
       opacity: 0.9,
       fontStyle: "italic",
@@ -101,66 +101,66 @@ const createCreativeStyles = (colorScheme: string = "coral") => {
       alignItems: "flex-end",
     },
     contactItem: {
-      fontSize: 10,
+      fontSize: 11, // Increased from 10
       color: theme.white,
-      marginBottom: 3,
+      marginBottom: 4, // Increased spacing
       opacity: 0.95,
     },
 
-    // Main content
+    // Main content with better spacing
     mainContent: {
       paddingHorizontal: 50,
-      paddingTop: 30,
+      paddingTop: 36, // Increased padding
     },
 
-    // Section styling
+    // Section styling with improved hierarchy
     section: {
-      marginBottom: 28,
+      marginBottom: 32, // Increased spacing
     },
     sectionHeader: {
       flexDirection: "row",
       alignItems: "center",
-      marginBottom: 18,
+      marginBottom: 20, // Increased spacing
     },
     sectionIcon: {
-      width: 4,
-      height: 20,
+      width: 5, // Increased width
+      height: 22, // Increased height
       backgroundColor: theme.primary,
-      marginRight: 12,
+      marginRight: 14, // Increased spacing
     },
     sectionTitle: {
-      fontSize: 18,
+      fontSize: 19, // Increased from 18
       fontWeight: "bold",
       color: theme.primary,
       textTransform: "uppercase",
-      letterSpacing: 1,
+      letterSpacing: 1.2,
       fontFamily: "Times-Roman",
     },
 
-    // Summary with elegant styling
+    // Summary with improved styling
     summaryContainer: {
       backgroundColor: theme.accent,
-      padding: 20,
-      borderRadius: 8,
-      borderLeftWidth: 4,
+      padding: 24, // Increased padding
+      borderRadius: 10,
+      borderLeftWidth: 5, // Increased accent
       borderLeftColor: theme.primary,
       borderLeftStyle: "solid",
     },
     summary: {
-      fontSize: 11,
+      fontSize: 12, // Increased from 11
       color: theme.text,
-      lineHeight: 1.6,
+      lineHeight: 1.7, // Improved line height
       fontStyle: "italic",
       textAlign: "justify",
     },
 
-    // Experience cards
+    // Experience cards with better spacing
     experienceCard: {
       backgroundColor: theme.lightGray,
-      padding: 20,
-      marginBottom: 16,
-      borderRadius: 8,
-      borderTopWidth: 3,
+      padding: 24, // Increased padding
+      marginBottom: 20, // Increased spacing
+      borderRadius: 10,
+      borderTopWidth: 4, // Increased accent
       borderTopColor: theme.primary,
       borderTopStyle: "solid",
     },
@@ -168,10 +168,10 @@ const createCreativeStyles = (colorScheme: string = "coral") => {
       flexDirection: "row",
       justifyContent: "space-between",
       alignItems: "flex-start",
-      marginBottom: 8,
+      marginBottom: 10, // Increased spacing
     },
     jobTitle: {
-      fontSize: 15,
+      fontSize: 16, // Increased from 15
       fontWeight: "bold",
       color: theme.dark,
       fontFamily: "Times-Roman",
@@ -180,17 +180,17 @@ const createCreativeStyles = (colorScheme: string = "coral") => {
     dateChip: {
       backgroundColor: theme.primary,
       color: theme.white,
-      fontSize: 9,
-      paddingHorizontal: 8,
-      paddingVertical: 4,
-      borderRadius: 12,
+      fontSize: 10, // Increased from 9
+      paddingHorizontal: 10, // Increased padding
+      paddingVertical: 5, // Increased padding
+      borderRadius: 14,
       textAlign: "center",
       fontWeight: "bold",
     },
     companyInfo: {
-      fontSize: 12,
+      fontSize: 13, // Increased from 12
       color: theme.primary,
-      marginBottom: 12,
+      marginBottom: 14, // Increased spacing
       fontWeight: "bold",
     },
     achievementsList: {
@@ -199,69 +199,64 @@ const createCreativeStyles = (colorScheme: string = "coral") => {
     achievementItem: {
       flexDirection: "row",
       alignItems: "flex-start",
-      marginBottom: 6,
+      marginBottom: 6, // Increased spacing
     },
-    achievementBullet: {
-      width: 6,
-      height: 6,
-      backgroundColor: theme.primary,
-      borderRadius: 3,
-      marginRight: 10,
-      marginTop: 6,
+    bulletPoint: {
+      fontSize: 14,
+      color: theme.primary,
+      marginRight: 12, // Increased spacing
+      marginTop: 1, // Align with text
+      fontWeight: "bold",
     },
     achievementText: {
       fontSize: 10,
       color: theme.text,
       flex: 1,
-      lineHeight: 1.5,
+      lineHeight: 1.6, // Improved line height
     },
 
-    // Skills with creative layout
+    // Skills section with enhanced design
     skillsGrid: {
       flexDirection: "row",
       flexWrap: "wrap",
-      gap: 8,
-      marginTop: 8,
+      gap: 10, // Increased gap
     },
-    skillChip: {
+    skillTag: {
       backgroundColor: theme.primary,
       color: theme.white,
-      paddingHorizontal: 12,
-      paddingVertical: 6,
-      borderRadius: 16,
       fontSize: 9,
+      paddingHorizontal: 12, // Increased padding
+      paddingVertical: 6, // Increased padding
+      borderRadius: 16,
       fontWeight: "bold",
       textAlign: "center",
     },
-    skillChipSecondary: {
-      backgroundColor: theme.secondary,
-      color: theme.white,
-      paddingHorizontal: 12,
-      paddingVertical: 6,
-      borderRadius: 16,
-      fontSize: 9,
+    skillCategory: {
+      fontSize: 13, // Increased from 12
       fontWeight: "bold",
-      textAlign: "center",
+      color: theme.dark,
+      marginBottom: 10,
+      marginTop: 16,
     },
 
-    // Education with elegant design
+    // Education cards with improved spacing
     educationCard: {
       backgroundColor: theme.accent,
-      padding: 16,
-      marginBottom: 12,
-      borderRadius: 6,
-      borderRightWidth: 4,
-      borderRightColor: theme.secondary,
-      borderRightStyle: "solid",
+      padding: 20, // Increased padding
+      marginBottom: 18, // Increased spacing
+      borderRadius: 10,
+      borderLeftWidth: 4, // Increased accent
+      borderLeftColor: theme.primary,
+      borderLeftStyle: "solid",
     },
     educationHeader: {
       flexDirection: "row",
       justifyContent: "space-between",
       alignItems: "flex-start",
-      marginBottom: 6,
+      marginBottom: 8,
     },
     educationTitle: {
-      fontSize: 13,
+      fontSize: 15, // Increased from 14
       fontWeight: "bold",
       color: theme.dark,
       fontFamily: "Times-Roman",
@@ -271,30 +266,29 @@ const createCreativeStyles = (colorScheme: string = "coral") => {
       fontSize: 10,
       color: theme.gray,
       backgroundColor: theme.white,
-      paddingHorizontal: 6,
-      paddingVertical: 3,
-      borderRadius: 8,
+      padding: 4,
+      borderRadius: 4,
     },
     educationDetails: {
-      fontSize: 10,
+      fontSize: 11,
       color: theme.text,
-      marginBottom: 2,
+      marginBottom: 3,
     },
     institutionName: {
-      fontSize: 11,
+      fontSize: 12, // Increased from 11
       color: theme.primary,
       fontWeight: "bold",
     },
 
-    // Projects with creative cards
+    // Projects section with enhanced design
     projectCard: {
-      backgroundColor: theme.white,
-      padding: 18,
-      marginBottom: 16,
-      borderRadius: 8,
-      borderWidth: 2,
-      borderColor: theme.accent,
-      borderStyle: "solid",
+      backgroundColor: theme.lightGray,
+      padding: 22, // Increased padding
+      marginBottom: 20, // Increased spacing
+      borderRadius: 10,
+      borderTopWidth: 4, // Increased accent
+      borderTopColor: theme.primary,
+      borderTopStyle: "solid",
     },
     projectHeader: {
       flexDirection: "row",
@@ -303,68 +297,58 @@ const createCreativeStyles = (colorScheme: string = "coral") => {
       marginBottom: 10,
     },
     projectTitle: {
-      fontSize: 14,
+      fontSize: 15, // Increased from 14
       fontWeight: "bold",
-      color: theme.primary,
+      color: theme.dark,
       fontFamily: "Times-Roman",
       flex: 1,
     },
-    projectTechContainer: {
-      flexDirection: "row",
-      flexWrap: "wrap",
-      gap: 4,
-      marginBottom: 10,
-    },
-    projectTechChip: {
-      backgroundColor: theme.accent,
+    projectTech: {
+      fontSize: 10,
       color: theme.primary,
-      paddingHorizontal: 8,
-      paddingVertical: 3,
-      borderRadius: 10,
-      fontSize: 8,
-      fontWeight: "bold",
+      marginBottom: 12,
+      fontWeight: "600",
     },
     projectDescription: {
       fontSize: 10,
-      color: theme.gray,
-      marginBottom: 8,
-      lineHeight: 1.4,
-      fontStyle: "italic",
+      color: theme.text,
+      marginBottom: 12,
+      lineHeight: 1.6,
+      textAlign: "justify",
     },
 
-    // Certifications with badges
-    certificationContainer: {
-      flexDirection: "row",
-      flexWrap: "wrap",
-      gap: 12,
-    },
-    certificationBadge: {
-      backgroundColor: theme.primary,
-      color: theme.white,
-      padding: 12,
-      borderRadius: 8,
-      flex: 1,
-      minWidth: 120,
+    // Certifications with improved styling
+    certificationCard: {
+      backgroundColor: theme.accent,
+      padding: 18, // Increased padding
+      marginBottom: 16, // Increased spacing
+      borderRadius: 10,
+      borderLeftWidth: 4, // Increased accent
+      borderLeftColor: theme.primary,
+      borderLeftStyle: "solid",
     },
     certificationName: {
-      fontSize: 11,
+      fontSize: 13, // Increased from 12
       fontWeight: "bold",
+      color: theme.dark,
+      fontFamily: "Times-Roman",
       marginBottom: 4,
     },
     certificationIssuer: {
-      fontSize: 9,
-      opacity: 0.9,
-      marginBottom: 2,
+      fontSize: 11, // Increased from 10
+      color: theme.primary,
+      marginBottom: 4,
     },
     certificationDate: {
-      fontSize: 8,
-      opacity: 0.8,
+      fontSize: 10, // Increased from 9
+      color: theme.gray,
+      fontStyle: "italic",
     },
 
-    // Layout utilities
+    // Layout with improved spacing
     twoColumn: {
       flexDirection: "row",
-      gap: 24,
+      gap: 40, // Increased gap
     },
     leftColumn: {
       flex: 2,
@@ -373,18 +357,14 @@ const createCreativeStyles = (colorScheme: string = "coral") => {
       flex: 1,
     },
 
-    // Decorative elements
-    decorativeLine: {
-      height: 2,
-      backgroundColor: theme.secondary,
-      marginVertical: 15,
-      borderRadius: 1,
-    },
-    accentBox: {
+    // Utility styles
+    divider: {
+      height: 1,
       backgroundColor: theme.accent,
-      padding: 8,
-      borderRadius: 4,
-      marginBottom: 8,
+      marginVertical: 12,
+    },
+    pageBreak: {
+      pageBreakBefore: "always",
     },
   });
 };
@@ -408,16 +388,32 @@ const CreativeTemplate: React.FC<CreativeTemplateProps> = ({
           <View style={styles.header}>
             <View style={styles.nameSection}>
               <Text style={styles.name}>{resume.contact.name}</Text>
-              <Text style={styles.tagline}>Creative Professional</Text>
+              {resume.summary && (
+                <Text style={styles.tagline}>
+                  {resume.summary.substring(0, 100)}
+                  {resume.summary.length > 100 ? "..." : ""}
+                </Text>
+              )}
             </View>
             <View style={styles.contactSection}>
-              <Text style={styles.contactItem}>{resume.contact.email}</Text>
-              <Text style={styles.contactItem}>{resume.contact.phone}</Text>
-              <Text style={styles.contactItem}>{resume.contact.location}</Text>
+              {resume.contact.email && (
+                <Text style={styles.contactItem}>{resume.contact.email}</Text>
+              )}
+              {resume.contact.phone && (
+                <Text style={styles.contactItem}>{resume.contact.phone}</Text>
+              )}
+              {resume.contact.location && (
+                <Text style={styles.contactItem}>
+                  {resume.contact.location}
+                </Text>
+              )}
               {resume.contact.linkedin && (
                 <Text style={styles.contactItem}>
                   {resume.contact.linkedin}
                 </Text>
+              )}
+              {resume.contact.github && (
+                <Text style={styles.contactItem}>{resume.contact.github}</Text>
               )}
               {resume.contact.website && (
                 <Text style={styles.contactItem}>{resume.contact.website}</Text>
@@ -427,59 +423,105 @@ const CreativeTemplate: React.FC<CreativeTemplateProps> = ({
         </View>
 
         <View style={styles.mainContent}>
-          {/* Summary */}
-          <View style={styles.section}>
-            <View style={styles.sectionHeader}>
-              <View style={styles.sectionIcon} />
-              <Text style={styles.sectionTitle}>About</Text>
-            </View>
-            <View style={styles.summaryContainer}>
-              <Text style={styles.summary}>{resume.summary}</Text>
-            </View>
-          </View>
-
-          {/* Experience */}
-          <View style={styles.section}>
-            <View style={styles.sectionHeader}>
-              <View style={styles.sectionIcon} />
-              <Text style={styles.sectionTitle}>Experience</Text>
-            </View>
-            {resume.experience.map((exp, index) => (
-              <View key={index} style={styles.experienceCard}>
-                <View style={styles.experienceHeader}>
-                  <Text style={styles.jobTitle}>{exp.position}</Text>
-                  <Text style={styles.dateChip}>
-                    {exp.startDate} - {exp.endDate}
-                  </Text>
-                </View>
-                <Text style={styles.companyInfo}>
-                  {exp.company} • {exp.location}
-                </Text>
-                <View style={styles.achievementsList}>
-                  {exp.responsibilities.map((resp, idx) => (
-                    <View key={idx} style={styles.achievementItem}>
-                      <View style={styles.achievementBullet} />
-                      <Text style={styles.achievementText}>{resp}</Text>
-                    </View>
-                  ))}
-                  {exp.achievements &&
-                    exp.achievements.map((achievement, idx) => (
-                      <View key={idx} style={styles.achievementItem}>
-                        <View style={styles.achievementBullet} />
-                        <Text style={styles.achievementText}>
-                          {achievement}
-                        </Text>
-                      </View>
-                    ))}
-                </View>
+          {/* Summary - Only render if present */}
+          {resume.summary && (
+            <View style={styles.section}>
+              <View style={styles.sectionHeader}>
+                <View style={styles.sectionIcon} />
+                <Text style={styles.sectionTitle}>Summary</Text>
               </View>
-            ))}
-          </View>
+              <View style={styles.summaryContainer}>
+                <Text style={styles.summary}>{resume.summary}</Text>
+              </View>
+            </View>
+          )}
 
-          {/* Two Column Layout */}
+          {/* Experience - Only render if present */}
+          {resume.experience && resume.experience.length > 0 && (
+            <View style={styles.section}>
+              <View style={styles.sectionHeader}>
+                <View style={styles.sectionIcon} />
+                <Text style={styles.sectionTitle}>Experience</Text>
+              </View>
+              {resume.experience.map((exp, index) => (
+                <View key={index} style={styles.experienceCard}>
+                  <View style={styles.experienceHeader}>
+                    <Text style={styles.jobTitle}>{exp.position}</Text>
+                    {(exp.startDate || exp.endDate) && (
+                      <Text style={styles.dateChip}>
+                        {exp.startDate || ""} - {exp.endDate || "Present"}
+                      </Text>
+                    )}
+                  </View>
+                  <Text style={styles.companyInfo}>
+                    {exp.company}
+                    {exp.location ? ` • ${exp.location}` : ""}
+                  </Text>
+                  <View style={styles.achievementsList}>
+                    {exp.responsibilities &&
+                      exp.responsibilities.map((resp, idx) => (
+                        <View key={idx} style={styles.achievementItem}>
+                          <Text style={styles.bulletPoint}>•</Text>
+                          <Text style={styles.achievementText}>{resp}</Text>
+                        </View>
+                      ))}
+                    {exp.achievements &&
+                      exp.achievements.map((achievement, idx) => (
+                        <View key={idx} style={styles.achievementItem}>
+                          <Text style={styles.bulletPoint}>•</Text>
+                          <Text style={styles.achievementText}>
+                            {achievement}
+                          </Text>
+                        </View>
+                      ))}
+                  </View>
+                </View>
+              ))}
+            </View>
+          )}
+
+          {/* Two-column layout */}
           <View style={styles.twoColumn}>
             <View style={styles.leftColumn}>
-              {/* Projects */}
+              {/* Education - Only render if present */}
+              {resume.education && resume.education.length > 0 && (
+                <View style={styles.section}>
+                  <View style={styles.sectionHeader}>
+                    <View style={styles.sectionIcon} />
+                    <Text style={styles.sectionTitle}>Education</Text>
+                  </View>
+                  {resume.education.map((edu, index) => (
+                    <View key={index} style={styles.educationCard}>
+                      <View style={styles.educationHeader}>
+                        <Text style={styles.educationTitle}>{edu.degree}</Text>
+                        {edu.endDate && (
+                          <Text style={styles.educationDate}>
+                            {edu.endDate}
+                          </Text>
+                        )}
+                      </View>
+                      {edu.field && (
+                        <Text style={styles.educationDetails}>{edu.field}</Text>
+                      )}
+                      <Text style={styles.institutionName}>
+                        {edu.institution}
+                      </Text>
+                      {edu.gpa && (
+                        <Text style={styles.educationDetails}>
+                          GPA: {edu.gpa}
+                        </Text>
+                      )}
+                      {edu.honors && edu.honors.length > 0 && (
+                        <Text style={styles.educationDetails}>
+                          Honors: {edu.honors.join(", ")}
+                        </Text>
+                      )}
+                    </View>
+                  ))}
+                </View>
+              )}
+
+              {/* Projects - Only render if present */}
               {resume.projects && resume.projects.length > 0 && (
                 <View style={styles.section}>
                   <View style={styles.sectionHeader}>
@@ -490,30 +532,37 @@ const CreativeTemplate: React.FC<CreativeTemplateProps> = ({
                     <View key={index} style={styles.projectCard}>
                       <View style={styles.projectHeader}>
                         <Text style={styles.projectTitle}>{project.name}</Text>
-                        <Text style={styles.dateChip}>
-                          {project.startDate} - {project.endDate}
-                        </Text>
-                      </View>
-                      <View style={styles.projectTechContainer}>
-                        {project.technologies.map((tech, idx) => (
-                          <Text key={idx} style={styles.projectTechChip}>
-                            {tech}
+                        {(project.startDate || project.endDate) && (
+                          <Text style={styles.dateChip}>
+                            {project.startDate || ""} -{" "}
+                            {project.endDate || "Present"}
                           </Text>
-                        ))}
+                        )}
                       </View>
+                      {project.technologies &&
+                        project.technologies.length > 0 && (
+                          <Text style={styles.projectTech}>
+                            {project.technologies.join(" • ")}
+                          </Text>
+                        )}
                       <Text style={styles.projectDescription}>
                         {project.description}
                       </Text>
-                      <View style={styles.achievementsList}>
-                        {project.highlights.map((highlight, idx) => (
+                      {project.url && (
+                        <Text style={styles.contactItem}>{project.url}</Text>
+                      )}
+                      {project.github && (
+                        <Text style={styles.contactItem}>{project.github}</Text>
+                      )}
+                      {project.highlights &&
+                        project.highlights.map((highlight, idx) => (
                           <View key={idx} style={styles.achievementItem}>
-                            <View style={styles.achievementBullet} />
+                            <Text style={styles.bulletPoint}>•</Text>
                             <Text style={styles.achievementText}>
                               {highlight}
                             </Text>
                           </View>
                         ))}
-                      </View>
                     </View>
                   ))}
                 </View>
@@ -521,75 +570,80 @@ const CreativeTemplate: React.FC<CreativeTemplateProps> = ({
             </View>
 
             <View style={styles.rightColumn}>
-              {/* Skills */}
-              <View style={styles.section}>
-                <View style={styles.sectionHeader}>
-                  <View style={styles.sectionIcon} />
-                  <Text style={styles.sectionTitle}>Skills</Text>
-                </View>
-                <View style={styles.skillsGrid}>
-                  {resume.skills.map((skill, index) => (
-                    <Text
-                      key={index}
-                      style={
-                        index % 2 === 0
-                          ? styles.skillChip
-                          : styles.skillChipSecondary
-                      }
-                    >
-                      {skill.name}
-                    </Text>
-                  ))}
-                </View>
-              </View>
-
-              {/* Education */}
-              <View style={styles.section}>
-                <View style={styles.sectionHeader}>
-                  <View style={styles.sectionIcon} />
-                  <Text style={styles.sectionTitle}>Education</Text>
-                </View>
-                {resume.education.map((edu, index) => (
-                  <View key={index} style={styles.educationCard}>
-                    <View style={styles.educationHeader}>
-                      <Text style={styles.educationTitle}>{edu.degree}</Text>
-                      <Text style={styles.educationDate}>{edu.endDate}</Text>
-                    </View>
-                    <Text style={styles.educationDetails}>{edu.field}</Text>
-                    <Text style={styles.institutionName}>
-                      {edu.institution}
-                    </Text>
-                    {edu.gpa && (
-                      <Text style={styles.educationDetails}>
-                        GPA: {edu.gpa}
-                      </Text>
-                    )}
+              {/* Skills - Only render if present */}
+              {resume.skills && resume.skills.length > 0 && (
+                <View style={styles.section}>
+                  <View style={styles.sectionHeader}>
+                    <View style={styles.sectionIcon} />
+                    <Text style={styles.sectionTitle}>Skills</Text>
                   </View>
-                ))}
-              </View>
+                  <View style={styles.skillsGrid}>
+                    {resume.skills.map((skill, index) => (
+                      <Text key={index} style={styles.skillTag}>
+                        {skill.name}
+                      </Text>
+                    ))}
+                  </View>
+                </View>
+              )}
 
-              {/* Certifications */}
+              {/* Certifications - Only render if present */}
               {resume.certifications && resume.certifications.length > 0 && (
                 <View style={styles.section}>
                   <View style={styles.sectionHeader}>
                     <View style={styles.sectionIcon} />
                     <Text style={styles.sectionTitle}>Certifications</Text>
                   </View>
-                  <View style={styles.certificationContainer}>
-                    {resume.certifications.map((cert, index) => (
-                      <View key={index} style={styles.certificationBadge}>
-                        <Text style={styles.certificationName}>
-                          {cert.name}
-                        </Text>
-                        <Text style={styles.certificationIssuer}>
-                          {cert.issuer}
-                        </Text>
+                  {resume.certifications.map((cert, index) => (
+                    <View key={index} style={styles.certificationCard}>
+                      <Text style={styles.certificationName}>{cert.name}</Text>
+                      <Text style={styles.certificationIssuer}>
+                        {cert.issuer}
+                      </Text>
+                      {cert.date && (
                         <Text style={styles.certificationDate}>
                           {cert.date}
                         </Text>
-                      </View>
-                    ))}
+                      )}
+                      {cert.expiryDate && (
+                        <Text style={styles.certificationDate}>
+                          Expires: {cert.expiryDate}
+                        </Text>
+                      )}
+                    </View>
+                  ))}
+                </View>
+              )}
+
+              {/* Languages - Only render if present */}
+              {resume.languages && resume.languages.length > 0 && (
+                <View style={styles.section}>
+                  <View style={styles.sectionHeader}>
+                    <View style={styles.sectionIcon} />
+                    <Text style={styles.sectionTitle}>Languages</Text>
                   </View>
+                  {resume.languages.map((lang, index) => (
+                    <View key={index} style={styles.achievementItem}>
+                      <Text style={styles.bulletPoint}>•</Text>
+                      <Text style={styles.achievementText}>{lang}</Text>
+                    </View>
+                  ))}
+                </View>
+              )}
+
+              {/* Awards - Only render if present */}
+              {resume.awards && resume.awards.length > 0 && (
+                <View style={styles.section}>
+                  <View style={styles.sectionHeader}>
+                    <View style={styles.sectionIcon} />
+                    <Text style={styles.sectionTitle}>Awards</Text>
+                  </View>
+                  {resume.awards.map((award, index) => (
+                    <View key={index} style={styles.achievementItem}>
+                      <Text style={styles.bulletPoint}>•</Text>
+                      <Text style={styles.achievementText}>{award}</Text>
+                    </View>
+                  ))}
                 </View>
               )}
             </View>

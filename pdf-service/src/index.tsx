@@ -14,7 +14,12 @@ import ModernTemplate from "./templates/modern/ModernTemplate";
 import CorporateTemplate from "./templates/corporate/CorporateTemplate";
 import CreativeTemplate from "./templates/creative/CreativeTemplate";
 import MinimalTemplate from "./templates/minimal/MinimalTemplate";
-import { RenderRequest, RenderResponse } from "./types/resume";
+import {
+  RenderRequest,
+  RenderResponse,
+  TEMPLATES,
+  TEMPLATE_INFO,
+} from "./types/resume";
 
 // Simple dummy template for testing
 const DummyTemplate = () => (
@@ -42,67 +47,21 @@ app.get("/health", (req, res) => {
   res.json({
     status: "healthy",
     timestamp: new Date().toISOString(),
-    availableTemplates: ["modern", "corporate", "creative", "minimal", "dummy"],
+    availableTemplates: Object.keys(TEMPLATE_INFO),
   });
 });
 
 // Get available templates
 app.get("/templates", (req, res) => {
-  res.json({
-    templates: [
-      {
-        id: "modern",
-        name: "Modern Professional",
-        description:
-          "Clean, modern design with two-column layout and professional styling",
-        colorSchemes: ["blue", "green", "purple", "black"],
-        features: [
-          "Two-column layout",
-          "Professional styling",
-          "ATS-friendly",
-          "Color accents",
-        ],
-      },
-      {
-        id: "corporate",
-        name: "Corporate Classic",
-        description:
-          "Traditional corporate design with serif fonts and formal styling",
-        colorSchemes: ["navy", "charcoal", "burgundy", "forest"],
-        features: [
-          "Classic styling",
-          "Serif fonts",
-          "Formal layout",
-          "Conservative design",
-        ],
-      },
-      {
-        id: "creative",
-        name: "Creative Professional",
-        description:
-          "Modern creative design with elegant accents and vibrant colors",
-        colorSchemes: ["coral", "teal", "violet", "rose"],
-        features: [
-          "Creative layout",
-          "Elegant accents",
-          "Color header",
-          "Modern typography",
-        ],
-      },
-      {
-        id: "minimal",
-        name: "Minimal Clean",
-        description: "Simple, clean design focusing on content clarity",
-        colorSchemes: ["blue", "green", "purple", "black"],
-        features: [
-          "Minimal design",
-          "Clean layout",
-          "Focus on content",
-          "Simple styling",
-        ],
-      },
-    ],
-  });
+  const templates = Object.entries(TEMPLATE_INFO).map(([id, info]) => ({
+    id,
+    name: info.name,
+    description: info.description,
+    colorSchemes: info.colorSchemes,
+    features: info.features,
+  }));
+
+  res.json({ templates });
 });
 
 // PDF rendering endpoint
@@ -137,7 +96,7 @@ app.post("/render", async (req, res) => {
     const colorScheme = renderRequest.options?.colorScheme;
 
     switch (renderRequest.template) {
-      case "modern":
+      case TEMPLATES.MODERN:
         pdfDocument = (
           <ModernTemplate
             resume={renderRequest.resume}
@@ -146,7 +105,7 @@ app.post("/render", async (req, res) => {
         );
         break;
 
-      case "corporate":
+      case TEMPLATES.CORPORATE:
         pdfDocument = (
           <CorporateTemplate
             resume={renderRequest.resume}
@@ -157,7 +116,7 @@ app.post("/render", async (req, res) => {
         );
         break;
 
-      case "creative":
+      case TEMPLATES.CREATIVE:
         pdfDocument = (
           <CreativeTemplate
             resume={renderRequest.resume}
@@ -166,7 +125,7 @@ app.post("/render", async (req, res) => {
         );
         break;
 
-      case "minimal":
+      case TEMPLATES.MINIMAL:
         pdfDocument = (
           <MinimalTemplate
             resume={renderRequest.resume}
@@ -175,14 +134,16 @@ app.post("/render", async (req, res) => {
         );
         break;
 
-      case "dummy":
+      case TEMPLATES.DUMMY:
         pdfDocument = <DummyTemplate />;
         break;
 
       default:
         return res.status(400).json({
           success: false,
-          message: `Unknown template: ${renderRequest.template}. Available templates: modern, corporate, creative, minimal, dummy`,
+          message: `Unknown template: ${
+            renderRequest.template
+          }. Available templates: ${Object.keys(TEMPLATE_INFO).join(", ")}`,
         });
     }
 
@@ -198,50 +159,34 @@ app.post("/render", async (req, res) => {
 
       // Convert blob to buffer
       const arrayBuffer = await blob.arrayBuffer();
-      const pdfBuffer = Buffer.from(arrayBuffer);
+      const buffer = Buffer.from(arrayBuffer);
 
-      console.log(
-        "📋 PDF generated successfully! Size:",
-        pdfBuffer.length,
-        "bytes"
-      );
+      console.log("📋 Converted to buffer, size:", buffer.length, "bytes");
 
-      // Send the binary PDF data directly
-      res.end(pdfBuffer);
-    } catch (pdfError) {
-      console.error(
-        "❌ PDF generation failed:",
-        pdfError instanceof Error ? pdfError.message : String(pdfError)
-      );
-      return res.status(500).json({
-        success: false,
-        message: "PDF generation failed",
-        error: pdfError instanceof Error ? pdfError.message : String(pdfError),
-      });
+      // Stream the buffer to response
+      res.end(buffer);
+
+      console.log("📋 PDF generation completed successfully");
+    } catch (error) {
+      console.error("📋 Error in PDF generation:", error);
+      throw error;
     }
   } catch (error) {
-    // Safe error logging to avoid circular reference issues
-    console.error(
-      "❌ Request processing error:",
-      error instanceof Error ? error.message : String(error)
-    );
-
-    return res.status(500).json({
+    console.error("📋 Error processing request:", error);
+    res.status(500).json({
       success: false,
-      message: "Internal server error",
-      error: error instanceof Error ? error.message : "Unknown error",
+      message: `Error generating PDF: ${
+        error instanceof Error ? error.message : "Unknown error"
+      }`,
     });
   }
 });
 
 // Start server
 app.listen(PORT, () => {
-  console.log(`🚀 PDF Service running on port ${PORT}`);
-  console.log(`📋 Health check: http://localhost:${PORT}/health`);
-  console.log(`📋 Templates: http://localhost:${PORT}/templates`);
-  console.log(
-    `📋 Available templates: modern, corporate, creative, minimal, dummy`
-  );
+  console.log(`PDF service running on port ${PORT}`);
+  console.log(`Health check: http://localhost:${PORT}/health`);
+  console.log(`Templates: http://localhost:${PORT}/templates`);
 });
 
 export default app;
